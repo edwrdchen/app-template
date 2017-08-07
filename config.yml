@@ -18,4 +18,4 @@ language: R
 # If both dictionaries and terms are provided, all terms in the dictionary PLUS
 # all listed terms will be used
 
-terms: [skeletal, fossil, shell]
+terms: "point count*"
