@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # The command used to run your application
-r example_app/skeletal_fragments.r
+r example_app/Skeletal_fragments.r
