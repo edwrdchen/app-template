@@ -131,7 +131,7 @@ formation_clean <- sapply(formations, function(x) paste(lapply(x, paste, collaps
 
 
 #finds skeletal abundance
-skeletal_abund <- number_extract(sentence_parse)
+skeletal_abund <- number_extract(sentence_parsed)
 
 skeletal_abund <- subset(skeletal_abund, skeletal_abund$sentence_no %in% rownames(table(skeletal_abund$sentence_no))[which(table(skeletal_abund$sentence_no) == 1)])
 
