@@ -14,11 +14,8 @@ time_scale <- read.csv("https://paleobiodb.org/data1.2/intervals/list.txt?all_re
 #Define functions
 number_extract <- function(dependencies) {
   
-  number_only <- subset(dependencies$dependent, dependencies$governor=="%" & dependencies$type=="nummod")
+  subset(dependencies["dependent"], dependencies["type"] == "nummod" & dependencies["governor"] == "%")
   
-  sentence_no <- subset(dependencies$sentence, dependencies$governor=="%" & dependencies$type=="nummod")
-  
-  data.frame(sentence_no, number_only)
 }
 
 
