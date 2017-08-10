@@ -62,7 +62,7 @@ time_extract <- function(formation_name) {
   formation_name <- gsub("[Ff]m", "", formation_name)
   
   formation_name <- gsub("[Gg]roup", "", formation_name)
-  formation_name <- gsub("Gp", "", formation_name)
+  formation_name <- gsub("[Gg]p", "", formation_name)
 
   rock_time <- subset(rock_units$b_age, rock_units$unit_name == formation_name)
 
@@ -101,29 +101,6 @@ NLP_Info_Extract <- function(nlp) {
   error=function(error_message){
     message("Incomplete final line found by readTableHeader on 'text'")
     message(error_message)
-    return(NA)
-    #Extracts dependent words from single sentence
-    sentence <- as.character(nlp[[4]])
-    words.df <- read.csv(text=sentence, header=F)
-    words <- apply(words.df, 1, function(x) gsub("[{}]", "", x))
-    
-    #Extract type relationship words
-    parts <- as.character(nlp[[8]])
-    type.df <- read.csv(text=parts, header=F)
-    type <- apply(type.df, 1, function(x) gsub("[{}]", "", x))
-    
-    #Extract dependency numbers
-    numb <- as.character(nlp[[9]])
-    number.df <- read.csv(text=numb, header=F)
-    dependency_number <- apply(number.df, 1, function(x) gsub("[{}]", "", x))
-    
-    dependency_number[which(dependency_number==0)] <- NA
-    
-    dependencies <- data.frame("dependent"=words, "type"=type)
-    
-    dependencies$governor <- dependencies$dependent[as.numeric(dependency_number)]
-    
-    dependencies
     }
   )
 }
@@ -140,14 +117,15 @@ good_sentences <- good_sentences_blank[complete.cases(good_sentences_blank),]
 
 #create data frame with governor, dependent, and relationship type
 sentence_parse <- apply(good_sentences, 1, function(x) NLP_Info_Extract(x))
-
+                        
+sentence_parsed <- sentence_parse[!sapply(sentence_parse, is.null)]
 #extracts time periods from previous data frame
-time_period <- lapply(sentence_parse, time_period_extract)
+time_period <- lapply(sentence_parsed, time_period_extract)
 
 time_period[lengths(time_period)==0] <- NA #converts empty to NA
 
 #extracts formation names
-formations <- lapply(sentence_parse, formation_name_extract)
+formations <- lapply(sentence_parsed, formation_name_extract)
 
 formation_clean <- sapply(formations, function(x) paste(lapply(x, paste, collapse=", "), collapse=" "))
 
